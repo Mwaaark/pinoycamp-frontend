@@ -14,7 +14,9 @@ export default function Edit() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}`
+      );
       if (!response.ok) throw new Error("Something went wrong.");
 
       const data = await response.json();

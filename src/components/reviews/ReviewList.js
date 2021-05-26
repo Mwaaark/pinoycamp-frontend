@@ -7,7 +7,7 @@ export default function ReviewList({ items, onDeleteReview }) {
 
   const deleteReviewHandler = async (reviewId) => {
     const response = await fetch(
-      `http://localhost:5000/campgrounds/${id}/reviews/${reviewId}`,
+      `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews/${reviewId}`,
       {
         method: "DELETE",
       }

@@ -17,9 +17,12 @@ export default function Campground({
   const history = useHistory();
 
   const deleteCampgroundHandler = async () => {
-    const response = await fetch(`http://localhost:5000/campgrounds/${_id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${_id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     await response.json();
 

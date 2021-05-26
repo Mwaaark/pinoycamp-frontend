@@ -16,7 +16,7 @@ export default function Reviews() {
     setError(null);
     try {
       const response = await fetch(
-        `http://localhost:5000/campgrounds/${id}/reviews`
+        `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews`
       );
       if (!response.ok) throw new Error("Something went wrong.");
 

@@ -15,18 +15,21 @@ export default function EditForm({ _id, title, description, location, image }) {
 
     //needs validation
 
-    const response = await fetch(`http://localhost:5000/campgrounds/${_id}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        title: titleInputRef.current.value,
-        location: locatioInputRef.current.value,
-        image: imageInputRef.current.value,
-        description: descriptionInputRef.current.value,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${_id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          title: titleInputRef.current.value,
+          location: locatioInputRef.current.value,
+          image: imageInputRef.current.value,
+          description: descriptionInputRef.current.value,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     await response.json();
     history.push(`/campgrounds/${_id}`);

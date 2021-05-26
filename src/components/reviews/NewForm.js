@@ -14,7 +14,7 @@ export default function NewForm({ onAddReview }) {
     //needs validation
 
     const response = await fetch(
-      `http://localhost:5000/campgrounds/${id}/reviews`,
+      `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews`,
       {
         method: "POST",
         body: JSON.stringify({
