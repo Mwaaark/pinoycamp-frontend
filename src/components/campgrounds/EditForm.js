@@ -37,7 +37,7 @@ export default function EditForm({ _id, title, description, location, image }) {
 
   return (
     <div className="d-flex justify-content-center">
-      <Card style={{ width: "35rem" }}>
+      <Card className="shadow" style={{ width: "35rem" }}>
         <Card.Header className="text-center">Edit campground</Card.Header>
         <Card.Body>
           <Form onSubmit={editCampgroundHandler}>

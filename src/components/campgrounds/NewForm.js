@@ -37,7 +37,7 @@ export default function NewForm() {
 
   return (
     <div className="d-flex justify-content-center">
-      <Card style={{ width: "35rem" }}>
+      <Card className="shadow" style={{ width: "35rem" }}>
         <Card.Header className="text-center">Create new campground</Card.Header>
         <Card.Body>
           <Form onSubmit={addCampgroundHandler}>

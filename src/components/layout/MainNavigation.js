@@ -18,6 +18,7 @@ export default function MainNavigation() {
         expand="md"
         expanded={expanded}
         className="px-3"
+        fixed="top"
       >
         <Navbar.Brand
           as={NavLink}

@@ -3,8 +3,8 @@ import { Button, Card, Form } from "react-bootstrap";
 import { useParams } from "react-router";
 
 export default function NewForm({ onAddReview }) {
-  const ratingInputRef = useRef();
   const bodyInputRef = useRef();
+  const ratingInputRef = useRef();
 
   const { id } = useParams();
 
@@ -12,14 +12,17 @@ export default function NewForm({ onAddReview }) {
     event.preventDefault();
 
     //needs validation
+    if (+ratingInputRef.current.value <= 0) {
+      return;
+    }
 
     const response = await fetch(
       `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews`,
       {
         method: "POST",
         body: JSON.stringify({
-          rating: ratingInputRef.current.value,
           body: bodyInputRef.current.value,
+          rating: ratingInputRef.current.value,
         }),
         headers: {
           "Content-Type": "application/json",
