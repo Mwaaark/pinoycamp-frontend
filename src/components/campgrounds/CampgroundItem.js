@@ -9,13 +9,18 @@ export default function CampgroundItem({
   title,
   description,
   location,
-  image,
+  images,
   createdAt,
 }) {
+  let imgSrc;
+  if (images.length > 0) {
+    imgSrc = images[0].url;
+  }
+
   return (
     <Col md={4} className="my-3">
       <Card className="shadow h-100">
-        <Card.Img variant="top" src={image} alt={title} />
+        <Card.Img variant="top" src={imgSrc} alt={title} />
         <Card.Body>
           <Card.Title>{title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{location}</Card.Subtitle>

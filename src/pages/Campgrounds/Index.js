@@ -1,47 +1,36 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Spinner } from "react-bootstrap";
 import CampgroundList from "../../components/campgrounds/CampgroundList";
+import useHttp from "../../hooks/use-http";
 
 export default function Index() {
   const [campgrounds, setCampgrounds] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchCampgroundsHandler = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/campgrounds`
-      );
-      if (!response.ok) throw new Error("Something went wrong.");
-
-      const data = await response.json();
-      if (!data) throw new Error("Found no campgrounds.");
-
-      // const transformedData = data.campgrounds.map(
-      //   ({ _id, title, description, location, image, createdAt }) => {
-      //     return {
-      //       id: _id,
-      //       title,
-      //       description,
-      //       location,
-      //       image,
-      //       createdAt,
-      //     };
-      //   }
-      // );
-
-      setCampgrounds(data.campgrounds);
-    } catch (error) {
-      setError(error.message);
-    }
-    setIsLoading(false);
-  }, []);
+  const { isLoading, error, sendRequest: fetchCampgrounds } = useHttp();
 
   useEffect(() => {
-    fetchCampgroundsHandler();
-  }, [fetchCampgroundsHandler]);
+    const transformCampgrounds = (responseData) => {
+      const transformedCampgrounds = responseData.campgrounds.map(
+        ({ _id, title, description, location, images, createdAt }) => {
+          return {
+            _id,
+            title,
+            description,
+            location,
+            images,
+            createdAt,
+          };
+        }
+      );
+
+      setCampgrounds(transformedCampgrounds);
+    };
+
+    fetchCampgrounds(
+      { url: `${process.env.REACT_APP_BACKEND_URL}/campgrounds` },
+      transformCampgrounds
+    );
+  }, [fetchCampgrounds]);
 
   let content;
 

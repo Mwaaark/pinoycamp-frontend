@@ -1,37 +1,27 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Spinner } from "react-bootstrap";
 import { useParams } from "react-router";
 import Campground from "../../components/campgrounds/Campground";
+import useHttp from "../../hooks/use-http";
 
 export default function Show() {
   const [campground, setCampground] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { isLoading, error, sendRequest: fetchCampground } = useHttp();
 
   const { id } = useParams();
 
-  const fetchCampgroundHandler = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}`
-      );
-      if (!response.ok) throw new Error("Something went wrong.");
-
-      const data = await response.json();
-      if (!data) throw new Error("Found no campgrounds.");
-
-      setCampground(data.campground);
-    } catch (error) {
-      setError(error.message);
-    }
-    setIsLoading(false);
-  }, [id]);
-
   useEffect(() => {
-    fetchCampgroundHandler();
-  }, [fetchCampgroundHandler]);
+    const transformCampground = (responseData) => {
+      setCampground(responseData.campground);
+    };
+
+    fetchCampground(
+      {
+        url: `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}`,
+      },
+      transformCampground
+    );
+  }, [fetchCampground, id]);
 
   let content;
 

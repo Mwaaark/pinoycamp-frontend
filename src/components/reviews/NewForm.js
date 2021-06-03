@@ -1,8 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import { useParams } from "react-router";
 
 export default function NewForm({ onAddReview }) {
+  const [error, setError] = useState(null);
+
   const bodyInputRef = useRef();
   const ratingInputRef = useRef();
 
@@ -11,34 +13,54 @@ export default function NewForm({ onAddReview }) {
   const addReviewHandler = async (event) => {
     event.preventDefault();
 
-    //needs validation
-    if (+ratingInputRef.current.value <= 0) {
+    let enteredBody = bodyInputRef.current.value;
+    let enteredRating = +ratingInputRef.current.value;
+
+    // needs better validation with error message
+    if (enteredBody.trim().length < 6) {
+      console.log("Body must be at least 6 characters");
       return;
     }
 
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          body: bodyInputRef.current.value,
-          rating: ratingInputRef.current.value,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+    if (enteredRating < 1) {
+      console.log("Rating must be at least 1");
+      return;
+    }
+
+    setError(null);
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            body: enteredBody,
+            rating: enteredRating,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message);
       }
-    );
 
-    const data = await response.json();
+      onAddReview(responseData.review);
+    } catch (error) {
+      setError(error.message || "Something went wrong.");
+    }
 
-    const { review } = data;
-    onAddReview(review);
+    bodyInputRef.current.value = "";
+    ratingInputRef.current.value = 0;
   };
 
   return (
     <Card className="mb-3">
       <Card.Body>
+        {error && <p>{error}</p>}
         <Form onSubmit={addReviewHandler}>
           <h5>Leave a review:</h5>
           <Form.Group controlId="rating">
