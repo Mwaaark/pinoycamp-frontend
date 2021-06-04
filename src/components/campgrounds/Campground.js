@@ -84,12 +84,7 @@ export default function Campground({
         </Card>
       </Col>
       <Col md={5}>
-        <Card className="shadow">
-          <Card.Header as="h5">Reviews</Card.Header>
-          <Card.Body>
-            <Reviews />
-          </Card.Body>
-        </Card>
+        <Reviews />
       </Col>
     </Row>
   );

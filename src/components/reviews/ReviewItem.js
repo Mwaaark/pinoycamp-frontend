@@ -14,7 +14,9 @@ export default function ReviewItem({ reviewId, body, rating, onDeleteReview }) {
     <Media as="li" className="mb-3">
       <RiUser3Fill className="mt-1 mr-3" />
       <Media.Body>
-        <h5>{rating}</h5>
+        <p className="starability-result" data-rating={rating}>
+          Rated: {rating} stars
+        </p>
         <p className="text-muted mb-2">Name here</p>
         <p className="mb-2">{body}</p>
         <div>

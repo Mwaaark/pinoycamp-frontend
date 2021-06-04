@@ -1,85 +1,152 @@
-import React, { useRef, useState } from "react";
-import { Button, Card, Form } from "react-bootstrap";
+import React, { useRef, useState, Fragment } from "react";
+import { Alert, Button, Card, Form, Spinner } from "react-bootstrap";
 import { useParams } from "react-router";
+import useHttp from "../../hooks/use-http";
 
 export default function NewForm({ onAddReview }) {
-  const [error, setError] = useState(null);
-
-  const bodyInputRef = useRef();
-  const ratingInputRef = useRef();
-
+  const { isLoading, error, sendRequest: sendNewReview } = useHttp();
+  const [clientSideError, setClientSideError] = useState(null);
   const { id } = useParams();
+  const bodyInputRef = useRef();
+  const [starRating, setStarRating] = useState(5);
 
-  const addReviewHandler = async (event) => {
+  const starRatingChangeHandler = (event) => {
+    setStarRating(event.target.value);
+  };
+
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    let enteredBody = bodyInputRef.current.value;
-    let enteredRating = +ratingInputRef.current.value;
+    setClientSideError(null);
 
-    // needs better validation with error message
-    if (enteredBody.trim().length < 6) {
-      console.log("Body must be at least 6 characters");
+    const enteredBody = bodyInputRef.current.value;
+
+    console.log(starRating);
+
+    if (+starRating < 1) {
+      setClientSideError("Must be at least 1 star rating.");
       return;
     }
 
-    if (enteredRating < 1) {
-      console.log("Rating must be at least 1");
+    if (enteredBody.length < 5) {
+      setClientSideError("Body is required (at least 5 characters long).");
       return;
     }
 
-    setError(null);
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            body: enteredBody,
-            rating: enteredRating,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(responseData.message);
-      }
-
+    const transformData = (responseData) => {
       onAddReview(responseData.review);
-    } catch (error) {
-      setError(error.message || "Something went wrong.");
-    }
+      setStarRating(0);
+      bodyInputRef.current.value = "";
+    };
 
-    bodyInputRef.current.value = "";
-    ratingInputRef.current.value = 0;
+    sendNewReview(
+      {
+        url: `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews`,
+        method: "POST",
+        body: JSON.stringify({
+          rating: +starRating,
+          body: enteredBody,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      transformData
+    );
   };
 
   return (
-    <Card className="mb-3">
+    <Card className="mb-3 shadow">
       <Card.Body>
-        {error && <p>{error}</p>}
-        <Form onSubmit={addReviewHandler}>
-          <h5>Leave a review:</h5>
-          <Form.Group controlId="rating">
-            <Form.Label>Rating:</Form.Label>
+        {error && <Alert variant="danger">{error}</Alert>}
+        {clientSideError && <Alert variant="danger">{clientSideError}</Alert>}
+        <Form onSubmit={onSubmitHandler}>
+          <h5 className="text-muted">Leave a review:</h5>
+          <fieldset className="starability-basic">
+            <input
+              type="radio"
+              id="no-rate"
+              className="input-no-rate"
+              name="rating"
+              value="0"
+              aria-label="No rating."
+              onChange={starRatingChangeHandler}
+            />
+            <input
+              type="radio"
+              id="first-rate1"
+              name="rating"
+              value="1"
+              onChange={starRatingChangeHandler}
+            />
+            <label htmlFor="first-rate1" title="Terrible">
+              1 star
+            </label>
+            <input
+              type="radio"
+              id="first-rate2"
+              name="rating"
+              value="2"
+              onChange={starRatingChangeHandler}
+            />
+            <label htmlFor="first-rate2" title="Not good">
+              2 stars
+            </label>
+            <input
+              type="radio"
+              id="first-rate3"
+              name="rating"
+              value="3"
+              onChange={starRatingChangeHandler}
+            />
+            <label htmlFor="first-rate3" title="Average">
+              3 stars
+            </label>
+            <input
+              type="radio"
+              id="first-rate4"
+              name="rating"
+              value="4"
+              onChange={starRatingChangeHandler}
+            />
+            <label htmlFor="first-rate4" title="Very good">
+              4 stars
+            </label>
+            <input
+              type="radio"
+              id="first-rate5"
+              name="rating"
+              value="5"
+              onChange={starRatingChangeHandler}
+            />
+            <label htmlFor="first-rate5" title="Amazing">
+              5 stars
+            </label>
+          </fieldset>
+          <Form.Group controlId="body">
             <Form.Control
-              type="range"
-              min={0}
-              max={5}
-              step={1}
-              ref={ratingInputRef}
-              defaultValue={0}
+              as="textarea"
+              rows={3}
+              ref={bodyInputRef}
+              placeholder="Type your review text here..."
             />
           </Form.Group>
-          <Form.Group controlId="body">
-            <Form.Label>Review text:</Form.Label>
-            <Form.Control as="textarea" rows={3} ref={bodyInputRef} />
-          </Form.Group>
           <Button variant="dark" size="sm" type="submit">
-            Submit
+            {isLoading ? (
+              <Fragment>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="mr-1"
+                />
+                Adding review...
+              </Fragment>
+            ) : (
+              "Submit"
+            )}
           </Button>
         </Form>
       </Card.Body>

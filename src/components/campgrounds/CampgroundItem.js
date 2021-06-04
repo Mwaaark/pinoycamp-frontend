@@ -13,6 +13,7 @@ export default function CampgroundItem({
   createdAt,
 }) {
   let imgSrc;
+
   if (images.length > 0) {
     imgSrc = images[0].url;
   }

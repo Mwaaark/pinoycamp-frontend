@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Button, Card, Form } from "react-bootstrap";
+import React, { useState, useRef, useEffect, Fragment } from "react";
+import { Button, Card, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
 import useHttp from "../../hooks/use-http";
 import bsCustomFileInput from "bs-custom-file-input";
@@ -39,7 +39,7 @@ export default function NewForm() {
       console.log("Location is required.");
       return;
     }
-    if (enteredDescription === "") {
+    if (enteredDescription.length < 5) {
       console.log("Description is required (at least 5 characters long).");
       return;
     }
@@ -49,7 +49,7 @@ export default function NewForm() {
       return;
     }
 
-    const transformCampground = (responseData) => {
+    const transformData = (responseData) => {
       history.push(`/campgrounds/${responseData.campground._id}`);
     };
 
@@ -68,7 +68,7 @@ export default function NewForm() {
         method: "POST",
         body: formData,
       },
-      transformCampground
+      transformData
     );
   };
 
@@ -124,7 +124,7 @@ export default function NewForm() {
                 Please provide a valid description (at least 5 characters long).
               </Form.Control.Feedback>
             </Form.Group>
-            <div className="mb-3">
+            <Form.Group>
               <Form.Label>Images</Form.Label>
               <Form.File id="images" custom>
                 <Form.File.Input
@@ -134,7 +134,7 @@ export default function NewForm() {
                   multiple
                 />
                 <Form.File.Label data-browse="Browse">
-                  Choose files
+                  Choose images
                 </Form.File.Label>
                 <Form.Control.Feedback type="valid">
                   Looks Good!
@@ -143,9 +143,23 @@ export default function NewForm() {
                   Please provide an image.
                 </Form.Control.Feedback>
               </Form.File>
-            </div>
+            </Form.Group>
             <Button variant="dark" type="submit">
-              {isLoading ? "Creating campground..." : "Submit"}
+              {isLoading ? (
+                <Fragment>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="mr-1"
+                  />
+                  Creating campground...
+                </Fragment>
+              ) : (
+                "Submit"
+              )}
             </Button>
           </Form>
         </Card.Body>

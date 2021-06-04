@@ -9,7 +9,7 @@ export default function Index() {
   const { isLoading, error, sendRequest: fetchCampgrounds } = useHttp();
 
   useEffect(() => {
-    const transformCampgrounds = (responseData) => {
+    const transformData = (responseData) => {
       const transformedCampgrounds = responseData.campgrounds.map(
         ({ _id, title, description, location, images, createdAt }) => {
           return {
@@ -28,7 +28,7 @@ export default function Index() {
 
     fetchCampgrounds(
       { url: `${process.env.REACT_APP_BACKEND_URL}/campgrounds` },
-      transformCampgrounds
+      transformData
     );
   }, [fetchCampgrounds]);
 

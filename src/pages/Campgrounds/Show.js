@@ -11,7 +11,7 @@ export default function Show() {
   const { id } = useParams();
 
   useEffect(() => {
-    const transformCampground = (responseData) => {
+    const transformData = (responseData) => {
       setCampground(responseData.campground);
     };
 
@@ -19,7 +19,7 @@ export default function Show() {
       {
         url: `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}`,
       },
-      transformCampground
+      transformData
     );
   }, [fetchCampground, id]);
 
