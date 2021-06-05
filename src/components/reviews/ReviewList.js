@@ -20,7 +20,9 @@ export default function ReviewList({ items, onDeleteReview }) {
   };
 
   return (
+    // adjust header, etc
     <Card className="shadow">
+      <Card.Header>All Reviews ({items.length})</Card.Header>
       <Card.Body>
         <ul className="list-unstyled">
           {items.map(({ _id, ...otherItemProps }) => (

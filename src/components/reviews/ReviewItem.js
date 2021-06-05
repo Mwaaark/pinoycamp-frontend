@@ -17,7 +17,7 @@ export default function ReviewItem({ reviewId, body, rating, onDeleteReview }) {
         <p className="starability-result" data-rating={rating}>
           Rated: {rating} stars
         </p>
-        <p className="text-muted mb-2">Name here</p>
+        <p className="text-muted mb-2">by John Doe</p>
         <p className="mb-2">{body}</p>
         <div>
           {authCtx.isLoggedIn && (

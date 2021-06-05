@@ -6,9 +6,10 @@ import useHttp from "../../hooks/use-http";
 export default function NewForm({ onAddReview }) {
   const { isLoading, error, sendRequest: sendNewReview } = useHttp();
   const [clientSideError, setClientSideError] = useState(null);
-  const { id } = useParams();
-  const bodyInputRef = useRef();
   const [starRating, setStarRating] = useState(5);
+  const bodyInputRef = useRef();
+
+  const { id } = useParams();
 
   const starRatingChangeHandler = (event) => {
     setStarRating(event.target.value);
@@ -20,8 +21,6 @@ export default function NewForm({ onAddReview }) {
     setClientSideError(null);
 
     const enteredBody = bodyInputRef.current.value;
-
-    console.log(starRating);
 
     if (+starRating < 1) {
       setClientSideError("Must be at least 1 star rating.");
@@ -57,11 +56,11 @@ export default function NewForm({ onAddReview }) {
 
   return (
     <Card className="mb-3 shadow">
+      <Card.Header>Leave a review</Card.Header>
       <Card.Body>
         {error && <Alert variant="danger">{error}</Alert>}
         {clientSideError && <Alert variant="danger">{clientSideError}</Alert>}
         <Form onSubmit={onSubmitHandler}>
-          <h5 className="text-muted">Leave a review:</h5>
           <fieldset className="starability-basic">
             <input
               type="radio"

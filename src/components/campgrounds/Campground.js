@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
-import { Badge, Card, Carousel, Col, Row } from "react-bootstrap";
+import React, { useState, useRef, useContext, useEffect } from "react";
+import { Badge, Card, Carousel, Col, Row, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import mapboxgl from "mapbox-gl";
 import Moment from "react-moment";
 import "moment-timezone";
 import Reviews from "../reviews/Reviews";
 import AuthContext from "../../context/auth-context";
+
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 export default function Campground({
   _id,
@@ -15,8 +18,24 @@ export default function Campground({
   images,
   createdAt,
 }) {
+  const mapContainer = useRef(null);
+  const map = useRef(null);
+  const [lng, setLng] = useState(-70.9);
+  const [lat, setLat] = useState(42.35);
+  const [zoom, setZoom] = useState(9);
+
   const authCtx = useContext(AuthContext);
   const history = useHistory();
+
+  useEffect(() => {
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom: zoom,
+    });
+  });
 
   const deleteCampgroundHandler = async () => {
     const response = await fetch(
@@ -34,7 +53,7 @@ export default function Campground({
   return (
     <Row>
       <Col md={7} className="mb-3 mb-md-0">
-        <Card className="shadow">
+        <Card className="shadow mb-3">
           <Carousel
             controls={images.length > 1 ? true : false}
             indicators={false}
@@ -51,9 +70,8 @@ export default function Campground({
               <Badge variant="dark">{location}</Badge>
             </Card.Subtitle>
             <Card.Subtitle className="mb-2 text-muted">
-              by Author here
+              by John Doe
             </Card.Subtitle>
-
             <Card.Text>{description}</Card.Text>
             <div>
               {authCtx.isLoggedIn && (
@@ -65,22 +83,30 @@ export default function Campground({
                 </Link>
               )}
               {authCtx.isLoggedIn && (
-                <button
+                <Button
                   type="submit"
                   className="btn btn-danger ml-2"
                   onClick={deleteCampgroundHandler}
                 >
                   Delete
-                </button>
+                </Button>
               )}
             </div>
           </Card.Body>
-
           <Card.Footer>
             <small className="text-muted">
               <Moment date={createdAt} format="MMMM DD, YYYY" />
             </small>
           </Card.Footer>
+        </Card>
+
+        <Card className="shadow">
+          <Card.Header>Check on map</Card.Header>
+          <div
+            ref={mapContainer}
+            className="map-container"
+            style={{ height: "300px" }}
+          />
         </Card>
       </Col>
       <Col md={5}>
