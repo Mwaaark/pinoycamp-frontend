@@ -36,6 +36,21 @@ export default function Campground({
       center: [lng, lat],
       zoom: zoom,
     });
+
+    map.current.addControl(new mapboxgl.NavigationControl());
+
+    new mapboxgl.Marker()
+      .setLngLat(geometry.coordinates)
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }).setHTML(
+          `
+          <strong>${title} </strong>
+          <br/>
+          ${location}
+        `
+        )
+      )
+      .addTo(map.current);
   });
 
   useEffect(() => {
