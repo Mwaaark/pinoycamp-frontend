@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext, useEffect } from "react";
 import { Badge, Card, Carousel, Col, Row, Button } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
-import mapboxgl from "mapbox-gl";
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import Moment from "react-moment";
 import "moment-timezone";
 import Reviews from "../reviews/Reviews";
