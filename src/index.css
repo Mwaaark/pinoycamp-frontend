@@ -15,3 +15,17 @@ body {
   flex-direction: column;
   min-height: 100%;
 }
+
+.mapbox-sidebar {
+  background-color: rgba(35, 55, 75, 0.9);
+  color: #ffffff;
+  padding: 6px 12px;
+  font-family: monospace;
+  z-index: 1;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  margin: 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
