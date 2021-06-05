@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 import { useParams } from "react-router";
 import ReviewList from "./ReviewList";
 import NewForm from "./NewForm";
@@ -75,7 +75,12 @@ export default function Reviews() {
   return (
     <>
       <NewForm onAddReview={addReviewHandler} />
-      {reviewContent}
+      <Card className="shadow">
+        <Card.Header>
+          All Reviews ({reviews && reviews.length > 0 ? reviews.length : 0})
+        </Card.Header>
+        <Card.Body>{reviewContent}</Card.Body>
+      </Card>
     </>
   );
 }

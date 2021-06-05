@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, Fragment } from "react";
-import { Button, Card, Form, Spinner } from "react-bootstrap";
+import { Alert, Button, Card, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
 import useHttp from "../../hooks/use-http";
 import bsCustomFileInput from "bs-custom-file-input";
@@ -81,7 +81,7 @@ export default function NewForm() {
       <Card className="shadow" style={{ width: "35rem" }}>
         <Card.Header className="text-center">Create new campground</Card.Header>
         <Card.Body>
-          {error && <p>{error}</p>}
+          {error && <Alert variant="danger">{error}</Alert>}
           <Form
             onSubmit={onSubmitHandler}
             encType="multipart/form-data"
