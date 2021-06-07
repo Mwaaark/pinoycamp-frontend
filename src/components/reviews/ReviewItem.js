@@ -3,7 +3,13 @@ import { Media } from "react-bootstrap";
 import { RiUser3Fill } from "react-icons/ri";
 import AuthContext from "../../context/auth-context";
 
-export default function ReviewItem({ reviewId, body, rating, onDeleteReview }) {
+export default function ReviewItem({
+  reviewId,
+  body,
+  rating,
+  author,
+  onDeleteReview,
+}) {
   const authCtx = useContext(AuthContext);
 
   const onDelete = () => {
@@ -17,10 +23,10 @@ export default function ReviewItem({ reviewId, body, rating, onDeleteReview }) {
         <p className="starability-result" data-rating={rating}>
           Rated: {rating} stars
         </p>
-        <p className="text-muted mb-2">by John Doe</p>
+        <p className="text-muted mb-2">by {author.name}</p>
         <p className="mb-2">{body}</p>
         <div>
-          {authCtx.isLoggedIn && (
+          {authCtx.userId === author._id && (
             <button
               type="button"
               className="btn btn-danger btn-sm"

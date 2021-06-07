@@ -38,7 +38,7 @@ export default function LoginForm() {
     }
 
     const transformData = (responseData) => {
-      authCtx.login();
+      authCtx.login(responseData.userId, responseData.token);
       history.replace("/campgrounds");
     };
 
@@ -46,13 +46,13 @@ export default function LoginForm() {
       {
         url: `${process.env.REACT_APP_BACKEND_URL}/login`,
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           email: enteredEmail,
           password: enteredPassword,
         }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
       transformData
     );

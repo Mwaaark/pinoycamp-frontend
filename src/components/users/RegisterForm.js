@@ -52,7 +52,7 @@ export default function SignupForm() {
     }
 
     const transformData = (responseData) => {
-      authCtx.login();
+      authCtx.login(responseData.userId, responseData.token);
       history.replace("/campgrounds");
     };
 
@@ -60,15 +60,15 @@ export default function SignupForm() {
       {
         url: `${process.env.REACT_APP_BACKEND_URL}/register`,
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           name: enteredName,
           email: enteredEmail,
           password: enteredPassword,
           confirmPassword: enteredConfirmPassword,
         }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
       transformData
     );
@@ -144,7 +144,7 @@ export default function SignupForm() {
                     aria-hidden="true"
                     className="mr-1"
                   />
-                  Creating account...
+                  Creating...
                 </Fragment>
               ) : (
                 "Register"

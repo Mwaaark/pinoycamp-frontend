@@ -18,10 +18,11 @@ export default function Reviews() {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${id}/reviews`
       );
-      if (!response.ok) throw new Error("Something went wrong.");
 
       const data = await response.json();
-      if (!data) throw new Error("Found no campgrounds.");
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
 
       setReviews(data.reviews);
     } catch (error) {

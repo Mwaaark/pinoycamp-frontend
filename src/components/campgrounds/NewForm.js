@@ -1,11 +1,19 @@
-import React, { useState, useRef, useEffect, Fragment } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  Fragment,
+  useContext,
+} from "react";
 import { Alert, Button, Card, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
 import useHttp from "../../hooks/use-http";
 import bsCustomFileInput from "bs-custom-file-input";
+import AuthContext from "../../context/auth-context";
 
 export default function NewForm() {
   const { isLoading, error, sendRequest: sendNewCampground } = useHttp();
+  const authCtx = useContext(AuthContext);
   const [validated, setValidated] = useState(false);
   const titleInputRef = useRef();
   const locationInputRef = useRef();
@@ -67,6 +75,9 @@ export default function NewForm() {
         url: `${process.env.REACT_APP_BACKEND_URL}/campgrounds`,
         method: "POST",
         body: formData,
+        headers: {
+          Authorization: "Bearer " + authCtx.token,
+        },
       },
       transformData
     );
@@ -155,7 +166,7 @@ export default function NewForm() {
                     aria-hidden="true"
                     className="mr-1"
                   />
-                  Creating campground...
+                  Creating...
                 </Fragment>
               ) : (
                 "Submit"

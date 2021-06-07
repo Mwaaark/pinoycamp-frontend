@@ -1,5 +1,14 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
-import { Badge, Card, Carousel, Col, Row, Button } from "react-bootstrap";
+import {
+  Badge,
+  Card,
+  Carousel,
+  Col,
+  Row,
+  Button,
+  Alert,
+  Spinner,
+} from "react-bootstrap";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
@@ -7,6 +16,8 @@ import Moment from "react-moment";
 import "moment-timezone";
 import Reviews from "../reviews/Reviews";
 import AuthContext from "../../context/auth-context";
+import useHttp from "../../hooks/use-http";
+import { Fragment } from "react";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
@@ -17,19 +28,21 @@ export default function Campground({
   location,
   geometry,
   images,
+  author,
   createdAt,
 }) {
+  const { isLoading, error, sendRequest: sendDeleteCampground } = useHttp();
+  const authCtx = useContext(AuthContext);
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(geometry.coordinates[0]);
   const [lat, setLat] = useState(geometry.coordinates[1]);
-  const [zoom, setZoom] = useState(9);
+  const [zoom, setZoom] = useState(11);
 
-  const authCtx = useContext(AuthContext);
   const history = useHistory();
 
   useEffect(() => {
-    if (map.current) return; // initialize map only once
+    if (map.current) return;
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
@@ -63,21 +76,27 @@ export default function Campground({
   });
 
   const deleteCampgroundHandler = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${_id}`,
+    const transformData = (responseData) => {
+      history.push("/campgrounds");
+    };
+
+    sendDeleteCampground(
       {
+        url: `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${_id}`,
         method: "DELETE",
-      }
+        body: null,
+        headers: {
+          Authorization: "Bearer " + authCtx.token,
+        },
+      },
+      transformData
     );
-
-    await response.json();
-
-    history.push("/campgrounds");
   };
 
   return (
     <Row>
       <Col md={7} className="mb-3 mb-md-0">
+        {error && <Alert variant="danger">{error}</Alert>}
         <Card className="shadow mb-3">
           <Carousel
             controls={images.length > 1 ? true : false}
@@ -91,15 +110,15 @@ export default function Campground({
           </Carousel>
           <Card.Body>
             <Card.Title>{title}</Card.Title>
-            <Card.Subtitle className="mb-2">
-              <Badge variant="dark">{location}</Badge>
+            <Card.Subtitle className="text-muted mb-2">
+              {location}
             </Card.Subtitle>
-            <Card.Subtitle className="mb-2 text-muted">
-              by John Doe
+            <Card.Subtitle className="mb-2">
+              <Badge variant="dark">by {author.name}</Badge>
             </Card.Subtitle>
             <Card.Text>{description}</Card.Text>
             <div>
-              {authCtx.isLoggedIn && (
+              {authCtx.userId === author._id && (
                 <Link
                   to={`/campgrounds/${_id}/edit`}
                   className="btn btn-primary"
@@ -107,13 +126,27 @@ export default function Campground({
                   Edit
                 </Link>
               )}
-              {authCtx.isLoggedIn && (
+              {authCtx.userId === author._id && (
                 <Button
                   type="submit"
                   className="btn btn-danger ml-2"
                   onClick={deleteCampgroundHandler}
                 >
-                  Delete
+                  {isLoading ? (
+                    <Fragment>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="mr-1"
+                      />
+                      Deleting...
+                    </Fragment>
+                  ) : (
+                    "Delete"
+                  )}
                 </Button>
               )}
             </div>
@@ -124,8 +157,9 @@ export default function Campground({
             </small>
           </Card.Footer>
         </Card>
-
-        <Card className="shadow">
+      </Col>
+      <Col md={5}>
+        <Card className="shadow-sm mb-3">
           <Card.Header>Check on map</Card.Header>
           <div className="mapbox-sidebar">
             Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
@@ -133,11 +167,9 @@ export default function Campground({
           <div
             ref={mapContainer}
             className="map-container"
-            style={{ height: "300px" }}
+            style={{ height: "15rem" }}
           />
         </Card>
-      </Col>
-      <Col md={5}>
         <Reviews />
       </Col>
     </Row>

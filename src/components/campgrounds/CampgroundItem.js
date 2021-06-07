@@ -19,7 +19,7 @@ export default function CampgroundItem({
   }
 
   return (
-    <Col md={4} className="my-3">
+    <Col md={6} lg={4} className="my-3">
       <Card className="shadow h-100">
         <Card.Img variant="top" src={imgSrc} alt={title} />
         <Card.Body>

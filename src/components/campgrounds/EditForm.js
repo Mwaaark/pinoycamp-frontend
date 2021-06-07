@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, Fragment } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  Fragment,
+  useContext,
+} from "react";
 import {
   Alert,
   Button,
@@ -12,6 +18,7 @@ import {
 import { useHistory } from "react-router";
 import useHttp from "../../hooks/use-http";
 import bsCustomFileInput from "bs-custom-file-input";
+import AuthContext from "../../context/auth-context";
 
 export default function EditForm({
   _id,
@@ -21,6 +28,7 @@ export default function EditForm({
   images,
 }) {
   const { isLoading, error, sendRequest: sendEditCampground } = useHttp();
+  const authCtx = useContext(AuthContext);
   const [validated, setValidated] = useState(false);
   const titleInputRef = useRef();
   const locationInputRef = useRef();
@@ -96,6 +104,9 @@ export default function EditForm({
         url: `${process.env.REACT_APP_BACKEND_URL}/campgrounds/${_id}`,
         method: "PUT",
         body: formData,
+        headers: {
+          Authorization: "Bearer " + authCtx.token,
+        },
       },
       transformData
     );
@@ -204,7 +215,7 @@ export default function EditForm({
                     aria-hidden="true"
                     className="mr-1"
                   />
-                  Editing campground...
+                  Editing...
                 </Fragment>
               ) : (
                 "Submit"

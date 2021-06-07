@@ -1,26 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const AuthContext = React.createContext({
-  // token: "",
-  isLoggedIn: true,
+  isLoggedIn: false,
+  token: null,
+  userId: null,
   login: () => {},
   logout: () => {},
 });
 
+let logoutTimer;
+
 export const AuthContextProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(false);
+  const [userId, setUserId] = useState(false);
+  const [tokenExpiration, setTokenExpiration] = useState(null);
 
-  const loginHandler = () => {
-    setIsLoggedIn(true);
-  };
+  const loginHandler = useCallback((userId, token, expirationDate) => {
+    setToken(token);
+    setUserId(userId);
+    const tokenExpiration =
+      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+    setTokenExpiration(tokenExpiration);
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        userId,
+        token,
+        expiration: tokenExpiration.toISOString(),
+      })
+    );
+  }, []);
 
-  const logoutHandler = () => {
-    setIsLoggedIn(false);
-  };
+  const logoutHandler = useCallback(() => {
+    setToken(null);
+    setUserId(null);
+    setTokenExpiration(null);
+    localStorage.removeItem("userData");
+  }, []);
+
+  useEffect(() => {
+    if (token && tokenExpiration) {
+      const remainingTime = tokenExpiration.getTime() - new Date().getTime();
+      logoutTimer = setTimeout(logoutHandler, remainingTime);
+    } else {
+      clearTimeout(logoutTimer);
+    }
+  }, [token, tokenExpiration, logoutHandler]);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+
+    if (
+      storedData &&
+      storedData.token &&
+      new Date(storedData.expiration) > new Date()
+    ) {
+      loginHandler(
+        storedData.userId,
+        storedData.token,
+        new Date(storedData.expiration)
+      );
+    }
+  }, [loginHandler]);
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, login: loginHandler, logout: logoutHandler }}
+      value={{
+        isLoggedIn: !!token,
+        token,
+        userId,
+        login: loginHandler,
+        logout: logoutHandler,
+      }}
     >
       {children}
     </AuthContext.Provider>
