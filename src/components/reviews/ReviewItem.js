@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Badge, Media } from "react-bootstrap";
+import { Media } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
 import AuthContext from "../../context/auth-context";
 
@@ -23,8 +23,8 @@ export default function ReviewItem({
         <p className="starability-result" data-rating={rating}>
           Rated: {rating} stars
         </p>
-        <p className="mb-2">
-          <Badge variant="secondary">by {author.name}</Badge>
+        <p className="mb-2 text-pink">
+          by <span className="text-capitalize">{author.name}</span>
         </p>
         <p className="text-muted mb-2">{body}</p>
         <div>

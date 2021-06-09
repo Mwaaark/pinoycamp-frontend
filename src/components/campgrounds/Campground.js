@@ -1,6 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import {
-  Badge,
   Card,
   Carousel,
   Col,
@@ -113,8 +112,8 @@ export default function Campground({
               {location}
             </Card.Subtitle>
             <Card.Title className="font-weight-bold">{title}</Card.Title>
-            <Card.Subtitle className="mb-2">
-              <Badge variant="secondary">by {author.name}</Badge>
+            <Card.Subtitle className="mb-2 text-pink">
+              by <span className="text-capitalize">{author.name}</span>
             </Card.Subtitle>
             <Card.Text className="text-muted">{description}</Card.Text>
             <div>
