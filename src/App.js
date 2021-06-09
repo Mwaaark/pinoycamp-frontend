@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from "react-router";
 import AuthContext from "./context/auth-context";
 import Layout from "./components/layout/Layout";
 import { Spinner } from "react-bootstrap";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 const Index = React.lazy(() => import("./pages/Campgrounds/Index"));
 const New = React.lazy(() => import("./pages/Campgrounds/New"));
@@ -26,6 +27,7 @@ export default function App() {
           </div>
         }
       >
+        <ScrollToTop />
         <Switch>
           <Route path="/" exact>
             <Redirect to="/campgrounds" />

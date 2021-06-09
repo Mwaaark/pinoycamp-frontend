@@ -83,7 +83,7 @@ export default function SignupForm() {
           <Form onSubmit={onSubmitHandler} validated={validated} noValidate>
             <Form.Group controlId="name">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" ref={nameInputRef} required autoFocus />
+              <Form.Control type="text" ref={nameInputRef} required />
               <Form.Control.Feedback type="valid">
                 Looks Good!
               </Form.Control.Feedback>

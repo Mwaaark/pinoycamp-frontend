@@ -69,12 +69,7 @@ export default function LoginForm() {
           <Form onSubmit={onSubmitHandler} validated={validated} noValidate>
             <Form.Group controlId="email">
               <Form.Label>Email:</Form.Label>
-              <Form.Control
-                type="email"
-                ref={emailInputRef}
-                required
-                autoFocus
-              />
+              <Form.Control type="email" ref={emailInputRef} required />
             </Form.Group>
             <Form.Group controlId="password">
               <Form.Label>Password:</Form.Label>

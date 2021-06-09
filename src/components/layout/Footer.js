@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="bg-gray py-5">
         <div className="container py-3">
           <Row>
-            <Col md={4} className="mb-4">
+            <Col md={4} className="mb-5 mb-md-0">
               <h5 className="text-uppercase font-weight-bold mb-3">
                 Directory
               </h5>
@@ -29,7 +29,7 @@ export default function Footer() {
               </div>
             </Col>
 
-            <Col md={4} className="mb-4">
+            <Col md={4} className="mb-5 mb-md-0">
               <h5 className="text-uppercase font-weight-bold mb-3">Pages</h5>
               <div className="text-muted">
                 <div>
