@@ -7,25 +7,13 @@ body {
 
 body {
   font-family: "Poppins", sans-serif;
-  padding-top: 5rem;
+  padding-top: 3rem;
 }
 
 #root {
   display: flex;
   flex-direction: column;
   min-height: 100%;
-}
-
-.letter-spacing-wider {
-  letter-spacing: 0.1em;
-}
-
-.desc-truncated {
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
 }
 
 .mapbox-wrapper {
@@ -44,4 +32,24 @@ body {
   margin: 12px;
   border-radius: 4px;
   font-size: 0.75rem;
+}
+
+.letter-spacing-wider {
+  letter-spacing: 0.1em;
+}
+
+.desc-truncated {
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.text-pink {
+  color: #e83e8c;
+}
+
+.bg-gray {
+  background-color: #e9ecef;
 }
