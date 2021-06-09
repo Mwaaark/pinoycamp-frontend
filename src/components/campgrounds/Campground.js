@@ -109,14 +109,14 @@ export default function Campground({
             ))}
           </Carousel>
           <Card.Body>
-            <Card.Title>{title}</Card.Title>
-            <Card.Subtitle className="text-muted mb-2">
+            <Card.Subtitle className="mb-2 text-muted text-uppercase">
               {location}
             </Card.Subtitle>
+            <Card.Title className="font-weight-bold">{title}</Card.Title>
             <Card.Subtitle className="mb-2">
-              <Badge variant="dark">by {author.name}</Badge>
+              <Badge variant="secondary">by {author.name}</Badge>
             </Card.Subtitle>
-            <Card.Text>{description}</Card.Text>
+            <Card.Text className="text-muted">{description}</Card.Text>
             <div>
               {authCtx.userId === author._id && (
                 <Link
@@ -160,7 +160,9 @@ export default function Campground({
       </Col>
       <Col md={5}>
         <Card className="shadow-sm mb-3">
-          <Card.Header>Check on map</Card.Header>
+          <Card.Header className="font-weight-bold text-uppercase">
+            Check on map
+          </Card.Header>
           <div className="mapbox-sidebar">
             Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
           </div>

@@ -59,7 +59,9 @@ export default function NewForm({ onAddReview }) {
 
   return (
     <Card className="mb-3 shadow">
-      <Card.Header>Leave a review</Card.Header>
+      <Card.Header className="font-weight-bold text-uppercase">
+        Leave a review
+      </Card.Header>
       <Card.Body>
         {error && <Alert variant="danger">{error}</Alert>}
         {clientSideError && <Alert variant="danger">{clientSideError}</Alert>}

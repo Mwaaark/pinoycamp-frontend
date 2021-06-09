@@ -37,7 +37,7 @@ export default function Reviews() {
 
   const addReviewHandler = (data) => {
     setReviews((prevReviews) => {
-      return [...prevReviews, data];
+      return [data, ...prevReviews];
     });
   };
 
@@ -77,7 +77,7 @@ export default function Reviews() {
     <>
       <NewForm onAddReview={addReviewHandler} />
       <Card className="shadow">
-        <Card.Header>
+        <Card.Header className="font-weight-bold text-uppercase">
           All Reviews ({reviews && reviews.length > 0 ? reviews.length : 0})
         </Card.Header>
         <Card.Body>{reviewContent}</Card.Body>

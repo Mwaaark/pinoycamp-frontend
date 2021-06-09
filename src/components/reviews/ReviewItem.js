@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { Media } from "react-bootstrap";
-import { RiUser3Fill } from "react-icons/ri";
+import { Badge, Media } from "react-bootstrap";
+import { FaUser } from "react-icons/fa";
 import AuthContext from "../../context/auth-context";
 
 export default function ReviewItem({
@@ -18,13 +18,15 @@ export default function ReviewItem({
 
   return (
     <Media as="li" className="mb-3">
-      <RiUser3Fill className="mt-1 mr-3" />
+      <FaUser className="mt-1 mr-3" style={{ fontSize: "1.5rem" }} />
       <Media.Body>
         <p className="starability-result" data-rating={rating}>
           Rated: {rating} stars
         </p>
-        <p className="text-muted mb-2">by {author.name}</p>
-        <p className="mb-2">{body}</p>
+        <p className="mb-2">
+          <Badge variant="secondary">by {author.name}</Badge>
+        </p>
+        <p className="text-muted mb-2">{body}</p>
         <div>
           {authCtx.userId === author._id && (
             <button
