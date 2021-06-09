@@ -26,7 +26,7 @@ export default function MainNavigation() {
         variant="dark"
         expand="md"
         expanded={expanded}
-        className="px-3"
+        className="px-3 font-weight-bold"
         fixed="top"
       >
         <Navbar.Brand
@@ -37,14 +37,14 @@ export default function MainNavigation() {
           exact
         >
           <FaCampground className="mr-2" />
-          PinoyCamp
+          <span className="text-uppercase letter-spacing-wider">PinoyCamp</span>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
           onClick={() => setExpanded(expanded ? false : "expanded")}
         />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
+          <Nav className="mr-auto ">
             <Nav.Link
               as={NavLink}
               to="/campgrounds"

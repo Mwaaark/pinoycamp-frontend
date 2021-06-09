@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   return (
     <>
       <MainNavigation />
-      <main className="py-5">{children}</main>
+      <main className="py-2 py-md-5 ">{children}</main>
       <Footer />
     </>
   );

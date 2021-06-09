@@ -164,11 +164,7 @@ export default function Campground({
           <div className="mapbox-sidebar">
             Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
           </div>
-          <div
-            ref={mapContainer}
-            className="map-container"
-            style={{ height: "15rem" }}
-          />
+          <div ref={mapContainer} className="map-container mapbox-wrapper" />
         </Card>
         <Reviews />
       </Col>

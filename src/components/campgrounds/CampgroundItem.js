@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, Col } from "react-bootstrap";
+import { FaLongArrowAltRight } from "react-icons/fa";
 import Moment from "react-moment";
 import "moment-timezone";
 
@@ -23,11 +24,18 @@ export default function CampgroundItem({
       <Card className="shadow h-100">
         <Card.Img variant="top" src={imgSrc} alt={title} />
         <Card.Body>
-          <Card.Title>{title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">{location}</Card.Subtitle>
-          <Card.Text className="text-truncate">{description}</Card.Text>
-          <Link to={`/campgrounds/${id}`} className="btn btn-outline-dark">
-            View Details
+          <Card.Subtitle className="mb-2 text-muted text-uppercase ">
+            {location}
+          </Card.Subtitle>
+          <Card.Title className="font-weight-bold">{title}</Card.Title>
+          <Card.Text className="text-muted desc-truncated">
+            {description}
+          </Card.Text>
+          <Link
+            to={`/campgrounds/${id}`}
+            className="text-uppercase font-weight-bold letter-spacing-wider"
+          >
+            Read More <FaLongArrowAltRight className="mb-1" />
           </Link>
         </Card.Body>
         <Card.Footer>
